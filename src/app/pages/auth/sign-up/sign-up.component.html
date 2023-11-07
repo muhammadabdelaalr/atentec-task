@@ -1,0 +1,60 @@
+<section>
+  <div class="container mx-auto pt-[10%]">
+    <div class="grid lg:grid-cols-1 lg:left-[50%] lg:translate-x-[50%] lg:w-2/4 gap-4">
+      <div class="form-container">
+        <mat-card>
+          <mat-card-content>
+            <div class="title text-center text-capitalize my-3">
+              <h1 class="text-4xl font-medium">Sign Up</h1>
+            </div>
+
+            <form [formGroup]="registerForm">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>User Name</mat-label>
+                <input type="text" matInput formControlName="userName" placeholder="Ex. johndoe" />
+                <mat-error *ngIf="registerForm.controls.userName.errors?.['required']">
+                  User Name is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="registerForm.controls.userName.errors?.['minlength']">
+                  Please provide your user name at least 8 characters.
+                </mat-error>
+                <mat-error *ngIf="registerForm.controls.userName.errors?.['pattern']">
+                  Please provide your user name in small letters only.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Full Name</mat-label>
+                <input type="text" matInput formControlName="fullName" placeholder="Ex. Mohamed Abdelaal" />
+                <mat-error *ngIf="registerForm.controls.fullName.errors?.['required']">
+                  Full Name is <strong>required</strong>.
+                </mat-error>
+                <mat-error *ngIf="registerForm.controls.fullName.errors?.['pattern']">
+                  Please provide your full name in letters only.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>password</mat-label>
+                <input [type]="hide ? 'password' : 'text'" formControlName="password" matInput placeholder="**********" />
+                <mat-icon matSuffix (click)="hide = !hide">{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+                <mat-error *ngIf="registerForm.controls.password.errors?.['required']">
+                  Password is <strong>required</strong>.
+                </mat-error>
+                <mat-error *ngIf="registerForm.controls.password.errors?.['pattern']">
+                  Create a password that matches the following pattern : least 8 characters long (A-b- @).
+                </mat-error>
+              </mat-form-field>
+
+              <div class="button text-center my-3">
+                <button mat-raised-button color="primary" [disabled]="registerForm.invalid" (click)="register()">Sign Up new</button>
+              </div>
+            </form>
+
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,121 @@
+<section>
+  <div class="container mx-auto pt-[10%]">
+    <div class="grid lg:grid-cols-1 lg:left-[50%] lg:translate-x-[50%] lg:w-2/4 gap-4">
+      <div class="form-container">
+        <mat-card>
+          <mat-card-content>
+            <div class="title text-center text-capitalize my-3" data-aos="fade-down" data-aos-duration="1000">
+              <h1 class="text-4xl font-medium">Profile</h1>
+            </div>
+
+            <form [formGroup]="profileForm">
+              <div class="fullname grid md:grid-cols-2 gap-4">
+                <mat-form-field appearance="fill" class="w-full" data-aos="fade-down" data-aos-duration="1000">
+                  <mat-label>first Name</mat-label>
+                  <input type="text" matInput [(ngModel)]="firstName" formControlName="firstName" />
+                  <!-- <mat-error *ngIf="profileForm.controls.firstName.errors?.['required']">
+                    First Name is <strong>required</strong>
+                  </mat-error> -->
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="w-full" data-aos="fade-down" data-aos-duration="1000">
+                  <mat-label>Last Name</mat-label>
+                  <input type="text" matInput [(ngModel)]="lastName" formControlName="lastName" />
+                  <!-- <mat-error *ngIf="profileForm.controls.lastName.errors?.['required']">
+                    Last Name is <strong>required</strong>
+                  </mat-error> -->
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="fill" class="w-full" data-aos="fade-down" data-aos-duration="1000">
+                <mat-label>Age</mat-label>
+                <input type="text" matInput formControlName="age" placeholder="Ex. 21" />
+                <mat-error *ngIf="profileForm.controls.age.errors?.['required']">
+                  Age is <strong>required</strong>.
+                </mat-error>
+                <mat-error *ngIf="profileForm.controls.age.errors?.['pattern']">
+                  Please provide your age in numbers only.
+                </mat-error>
+                <mat-error *ngIf="profileForm.controls.age.errors?.['min']">
+                  Minimum age allowed 8 years.
+                </mat-error>
+              </mat-form-field>
+              <!--
+              <mat-form-field appearance="fill" class="w-full" data-aos="fade-down" data-aos-duration="1000">
+                <mat-label>Country of Birth</mat-label>
+                <mat-select formControlName="countryOfBirth" placeholder="Ex. Andorra">
+                  <mat-option *ngFor="let item of countries" [value]="item.countryName">
+                    {{item.countryName}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="profileForm.controls.countryOfBirth.errors?.['required']">
+                  Country of Birth is <strong>required</strong>.
+                </mat-error>
+              </mat-form-field> -->
+
+              <mat-form-field class="w-full">
+                <mat-label>Country of Birth</mat-label>
+                <input type="text" aria-label="Number" matInput formControlName="countryOfBirth"
+                [matAutocomplete]="auto" #input>
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredOptions" [value]="option.countryName">
+                    {{option.countryName}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="profileForm.controls.countryOfBirth.errors?.['required']">
+                  Country of Birth is <strong>required</strong>.
+                </mat-error>
+              </mat-form-field>
+
+              <!-- <mat-form-field appearance="fill" class="w-full" data-aos="fade-down" data-aos-duration="1000">
+                <mat-label>Country of Birth</mat-label>
+                <mat-select formControlName="countryOfBirth" placeholder="Ex. Andorra">
+                  <mat-option *ngFor="let item of countries" [value]="item.countryName">
+                    {{item.countryName}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="profileForm.controls.countryOfBirth.errors?.['required']">
+                  Country of Birth is <strong>required</strong>.
+                </mat-error>
+              </mat-form-field> -->
+
+              <!-- <mat-form-field>
+                <input matInput formControlName="countryOfBirth" placeholder="Search Property">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredOptions" [value]="option.name">
+                    {{ option.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field> -->
+
+              <!-- <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Country of Birth</mat-label>
+                <input type="text" #input matInput formControlName="countryOfBirth"
+                  [matAutocomplete]="auto" (input)="filter()" (focus)="filter()">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                  <mat-option *ngFor="let item of countries" [value]="item.countryName">
+                    {{item.countryName}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field> -->
+
+              <mat-form-field appearance="fill" class="w-full" data-aos="fade-down" data-aos-duration="1000">
+                <mat-label>Address</mat-label>
+                <textarea matInput formControlName="address" placeholder="Ex. Egypt"></textarea>
+                <mat-error *ngIf="profileForm.controls.address.errors?.['required']">
+                  Address is <strong>required</strong>.
+                </mat-error>
+              </mat-form-field>
+
+              <div class="button text-center my-3" data-aos="fade-down" data-aos-duration="1000">
+                <button mat-raised-button color="primary" [disabled]="profileForm.invalid"
+                  (click)="profile()">Confirm</button>
+              </div>
+            </form>
+
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+    </div>
+  </div>
+</section>
