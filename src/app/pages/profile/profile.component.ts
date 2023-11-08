@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, debounceTime, map, startWith } from 'rxjs';
+import { debounceTime, of, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/shared/service/auth.service';
 import Swal from 'sweetalert2';
 
@@ -26,33 +26,76 @@ export class ProfileComponent implements OnInit {
   firstName?: string;
   lastName?: string;
 
-
   // //////////////////////////////////////////////////
   filteredOptions?: any[];
-
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private auth: AuthService
   ) {
+    // this.profileForm.controls.countryOfBirth.valueChanges
+    //   .pipe(debounceTime(800))
+    //   .subscribe((searchTerm) => {
+    //     if (searchTerm != '') {
+    //       this.auth.Get('/' + searchTerm).subscribe({
+    //         next: (res: any) => {
+    //           this.filteredOptions = res.data;
+    //           console.log(res);
+    //         },
+    //         error: (err: any) => {
+    //           console.log(err);
+    //         },
+    //       });
+    //     } else {
+    //       this.filteredOptions = this.countries;
+    //     }
+    //   });
+
+    // this.profileForm.controls.countryOfBirth.valueChanges
+    //   .pipe(
+    //     debounceTime(800),
+    //     switchMap((searchTerm) => {
+    //       if (searchTerm !== '') {
+    //         return this.getCountry(searchTerm);
+    //       } else {
+    //         return this.countries;
+    //       }
+    //     })
+    //   )
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.filteredOptions = res.data;
+    //       console.log(res);
+    //     },
+    //     error: (err: any) => {
+    //       console.log(err);
+    //     },
+    //   });
+
 
     this.profileForm.controls.countryOfBirth.valueChanges
-      .pipe(debounceTime(800))
-      .subscribe(searchTerm => {
-        if (searchTerm != '') {
-          this.auth.Get('/' + searchTerm).subscribe({
-            next: (res: any) => {
-              this.filteredOptions = res.data;
-              console.log(res);
-            }, error: (err: any) => {
-              console.log(err)
-            }
-          })
-        } else {
-          this.filteredOptions = this.countries;
+      .pipe(
+        debounceTime(800),
+        switchMap(searchTerm => {
+          if (searchTerm !== '') {
+            return this.auth.Get('/' + searchTerm);
+          } else {
+            return of(this.countries);
+          }
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.filteredOptions = res.data;
+          console.log(res);
+        },
+        error: (err: any) => {
+          console.log(err);
         }
       });
+
+
 
   }
 
@@ -67,10 +110,7 @@ export class ProfileComponent implements OnInit {
     address: ['', [Validators.required]],
   });
 
-
   ngOnInit(): void {
-
-
     this.auth.getObjectData().subscribe((objectData) => {
       this.data = objectData;
       this.firstName = this.data.fullName?.split(' ').slice(0, 1);
@@ -159,6 +199,18 @@ export class ProfileComponent implements OnInit {
         this.router.navigate(['/confirmation']);
       }, 1550);
     }
+  }
+
+  getCountry(searchTerm: any): any {
+    this.auth.Get('/' + searchTerm).subscribe({
+      next: (res: any) => {
+        this.filteredOptions = res.data;
+        console.log(res);
+      },
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
   }
 
   getCountries() {
